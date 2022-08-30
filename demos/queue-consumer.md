@@ -84,9 +84,9 @@ Create a consumer and select the values shown in the config below
 
 By specifying a queue when using `nats sub` NATS will deliver unique messages to each subscriber
 
-- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack`
-- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack`
-- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack`
+- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack --ack --raw`
+- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack --ack --raw`
+- `$ nats sub queue_stream_consumer --queue=queue_stream_consumer --ack --ack --raw`
 
 With the previous commands we subscribe to subject `queue_stream_consumer`, which was specified as `Delivery Subject` when creating the Consumer, and the value for `--queue` matches the string specified in `Delivery Queue Group` which was also specified during Consumer creation.
 

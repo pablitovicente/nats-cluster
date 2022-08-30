@@ -13,7 +13,9 @@ try {
   let pendingMessages = 10000
   // Publish messages with 1KB payload
   while (pendingMessages) {
-    await jetstreamClient.publish(`data.node_machine_${Math.floor(Math.random() * (pendingMessages) + 1)}`, randomBytes(1000))
+    await jetstreamClient.publish(`data.node_machine_${Math.floor(Math.random() * (pendingMessages) + 1)}`,
+      Buffer.from(JSON.stringify({ val: pendingMessages, data: randomBytes(1000) })),
+    )
     pendingMessages -= 1
   }
 

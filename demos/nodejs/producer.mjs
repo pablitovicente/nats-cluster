@@ -1,4 +1,5 @@
 import { randomBytes } from 'crypto'
+import ProgressBar from 'progress'
 import { connectNats } from './utils/index.mjs'
 
 let natsConn
@@ -11,8 +12,11 @@ try {
   const jetstreamClient = natsConn.jetstream()
 
   let pendingMessages = 10000
+  const progressBar = new ProgressBar(':bar :percent', { total: pendingMessages })
+  logger.info(`Publishing ${pendingMessages} messages`)
   // Publish messages with 1KB payload
   while (pendingMessages) {
+    progressBar.tick()
     await jetstreamClient.publish(
       `data.node_machine_${Math.floor(Math.random() * (pendingMessages) + 1)}`,
       Buffer.from(JSON.stringify({ val: pendingMessages, data: randomBytes(1000) })),

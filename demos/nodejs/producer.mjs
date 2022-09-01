@@ -11,7 +11,7 @@ try {
   // Create Jetstream client
   const jetstreamClient = natsConn.jetstream()
 
-  let pendingMessages = 10000
+  let pendingMessages = 200000
   const progressBar = new ProgressBar(':bar :percent', { total: pendingMessages })
   logger.info(`Publishing ${pendingMessages} messages`)
   // Publish messages with 1KB payload

@@ -16,8 +16,10 @@
   "license": "ISC",
   "dependencies": {
     "nats": "^2.7.1",
+    "pg": "^8.8.0",
     "progress": "^2.0.3",
     "redis": "^4.3.0",
+    "sequelize": "^6.21.4",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

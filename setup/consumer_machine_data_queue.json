@@ -1,0 +1,11 @@
+{
+  "ack_policy": "explicit",
+  "ack_wait": 30000000000,
+  "deliver_policy": "all",
+  "deliver_subject": "machine_data_queue",
+  "deliver_group": "machine_data_queue",
+  "durable_name": "machine_data_consumer",
+  "max_ack_pending": 1000,
+  "max_deliver": -1,
+  "replay_policy": "instant"
+}

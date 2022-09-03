@@ -1,6 +1,6 @@
 import { consumerOpts } from 'nats'
 import http from 'http'
-import { connectNats } from './utils/index.mjs'
+import { connectNats } from '../packages/utils/index.mjs'
 
 let natsConn
 let processedMessages = 0

@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto'
 import ProgressBar from 'progress'
-import { connectNats } from './utils/index.mjs'
+import { connectNats } from '../packages/utils/index.mjs'
 
 let natsConn
 const logger = console

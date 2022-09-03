@@ -1,5 +1,4 @@
 import { consumerOpts } from 'nats'
-import { setTimeout } from 'timers/promises'
 import http from 'http'
 import { connectNats } from './utils/index.mjs'
 
@@ -50,12 +49,9 @@ try {
   const sub = await jetstreamClient.subscribe('machine_data_queue', opts)
   // process messages
   for await (const m of sub) {
-    console.log(m.data.toString())
-    console.log(m.subject)
-    console.log(`worker got sequence: ${m.seq}`)
+    console.log(`worker got sequence: ${m.seq} on topic: ${m.subject}`)
     m.ack()
-    // Simulate slow work
-    await setTimeout(500, '')
+    // do any work here
     processedMessages += 1
   }
 } catch (err) {

@@ -28,4 +28,10 @@ You can also look at debug output by running NATS toolbox container
 
 ## Architecture
 
-![concept](https://raw.githubusercontent.com/pablitovicente/nats-cluster/refactor_demo/docs/demo-concept.png)
+![concept](https://raw.githubusercontent.com/pablitovicente/nats-cluster/main/docs/demo-concept.png)
+
+## TODO
+
+- refactor the NodeJS code to be a bit less hacky
+- provide a more complex stream and consumer structure
+- dockerize everything

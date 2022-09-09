@@ -1,45 +1,31 @@
-# Simple NATS Cluster with Jetstream for benchmarking and load testing
+# Simple NATS Cluster
+
+Quick demo on how to use [NATS Streams](https://github.com/nats-io/nats-server) with NodeJS
+
+## Prerequisites
+
+- Docker
+- NodeJS 16+
+
+## Setup
+
+- `docker-compose up` and wait for Nats to start
+- `cd setup && ./build_and_run.sh` to create the stream (in a real world scenario this is done by the application)
+- `npm i -g pm2` (if you want to stress test)
 
 ## How to run?
 
-- simply run `docker-compose up`
+- start multiple producers to fill the stream `pm2 start producer/producer.mjs && pm2 scale producer 10` (each producer publishes 20000 messages with delivery ack)
+  - this will start 10 producers and keep running forever
+  - you can stop the producers with `pm2 stop producer`
+- start a worker (or multiple on different terminals) `node worker/worker.mjs`
+- you can also start workers with pm2 `pm2 start workers/worker.mjs && pm2 scale worker 5 && pm2 logs`
 
-## Load Testing Tool
+You can also look at debug output by running NATS toolbox container
 
-- Download one of the releases of emqtt-bench from https://github.com/emqx/emqtt-bench/releases
+- `docker run --network docker-compose-nats_nats --rm -it natsio/nats-box:latest`
+- then `nats sub debug --server nats-1`
 
-This tool is helpful for observing CPU/Memory usage of NATS under different loads
+## Architecture
 
-### Connections
-
-```./emqtt_bench conn -c 20000 -i 1 -V 4 -n 10000```
-
-### Publish
-
-```./emqtt_bench pub -c 10000 -I 2 -t bench/%i -s 1024 -V 4 -L 10000```
-
-### Subscribe
-
-```./emqtt_bench sub -c 20000 -i 10 -t bench/%i -q 2 -V 4```
-
-## Dirty Hacky BenchMarking
-
-In a 8C/16T machine with 32GB 700K message of 1KB each per second were possible (probably limited by the heavy CPU usage of NodeJS. It's possible that with a better benchmark tool much higher rates are possible). NATS memory consumption was 1GB and CPU 350% for each node.
-
-- `npm i mqtt` and run the script below with ```pm2 start <the file name of the saved script>```
-- ```pm2 scale bench 15``` to scale to 15 copies of the script
-
-```
-const mqtt = require('mqtt')
-const client  = mqtt.connect('mqtt://localhost')
-
-const dummyMsg = JSON.stringify(Buffer.alloc(1024))
-
-client.on('connect', function () {
-  for (let i=0; i < 500; i+=1) {
-    setInterval(() => {
-      client.publish('debug', dummyMsg)
-    }, 0)
-  }
-})
-```
+![concept](https://raw.githubusercontent.com/pablitovicente/nats-cluster/refactor_demo/docs/demo-concept.png)

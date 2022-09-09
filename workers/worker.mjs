@@ -1,22 +1,9 @@
 import { consumerOpts } from 'nats'
-import http from 'http'
 import { connectNats } from '../packages/utils/index.mjs'
 
 let natsConn
 let processedMessages = 0
 const logger = console
-
-const requestListener = (req, res) => {
-  const response = {
-    now: new Date(),
-    processedMessages,
-  }
-  res.writeHead(200)
-  res.end(JSON.stringify(response))
-}
-
-const server = http.createServer(requestListener)
-server.listen(10000)
 
 const drain = async () => {
   // we want to insure that messages that are in flight
@@ -43,16 +30,16 @@ try {
   const jetstreamClient = natsConn.jetstream()
 
   const opts = consumerOpts()
-  opts.queue('machine_data_queue')
-  opts.bind('machine_data', 'machine_data_consumer')
+  opts.queue('sensor_data_queue')
+  opts.bind('sensor_data', 'sensor_data_consumer')
 
-  const sub = await jetstreamClient.subscribe('machine_data_queue', opts)
+  const sub = await jetstreamClient.subscribe('sensor_data_queue', opts)
   // process messages
   for await (const m of sub) {
     console.log(`worker got sequence: ${m.seq} on topic: ${m.subject}`)
     m.ack()
-    // do any work here
-    processedMessages += 1
+    // do any work here, here we just publish to regular NATS pub/sub
+    natsConn.publish('debug', m.data)
   }
 } catch (err) {
   logger.error('Encountered an error')

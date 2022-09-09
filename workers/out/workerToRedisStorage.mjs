@@ -33,10 +33,10 @@ try {
   const jetstreamClient = natsConn.jetstream()
 
   const opts = consumerOpts()
-  opts.queue('machine_data_queue')
-  opts.bind('machine_data', 'machine_data_consumer')
+  opts.queue('sensor_data_queue')
+  opts.bind('sensor_data', 'sensor_data_consumer')
 
-  const sub = await jetstreamClient.subscribe('machine_data_queue', opts)
+  const sub = await jetstreamClient.subscribe('sensor_data_queue', opts)
   // process messages
   for await (const m of sub) {
     console.log(m.data.toString())

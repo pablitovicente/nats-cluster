@@ -10,8 +10,7 @@ try {
   natsConn = await connectNats({ servers: ['localhost:4222', 'localhost:4223', 'localhost:4224'] })
   // Create Jetstream client
   const jetstreamClient = natsConn.jetstream()
-
-  let pendingMessages = 200000
+  let pendingMessages = Number(process.env.NUMBER_OF_MESSAGES) || 20000
   const progressBar = new ProgressBar(':bar :percent', { total: pendingMessages })
   logger.info(`Publishing ${pendingMessages} messages`)
   // Publish messages with 1KB payload
